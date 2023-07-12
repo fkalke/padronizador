@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Padronizador</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body>
+    <div class="w-100 d-flex row justify-content-center">
+        <div class="formArea">
+
+            <section class="logoArea">
+                <img src="/img/logotipo.png" class="logotipo">
+            </section>
+
+            <section class="mt-3 text-secondary">
+
+                <div class="mb-3">
+                    <label for="process" class="form-label">Número do processo</label>
+                    <input type="text" class="form-control" id="process">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="wasCodeChange">
+                    <label class="form-check-label" for="wasCodeChange">
+                        Houve alteração de código?
+                    </label>
+                </div>
+                <div class="row hidden" id="divProject">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="projectName" class="form-label">Projeto</label>
+                        <input type="text" class="form-control" id="projectName">
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="changedScreen" class="form-label">Tela Alterada</label>
+                        <input type="text" class="form-control" id="changedScreen">
+                    </div>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="true" id="hasScript">
+                    <label class="form-check-label" for="hasScript">
+                        Tem script?
+                    </label>
+                </div>
+                <div class="row hidden" id="divScript">
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="scriptName" class="form-label">Tipo</label>
+                        <select class="form-select mb-3 text-secondary" id="scriptType">
+                            <option selected>Selecione...</option>
+                            <option value="1">Script</option>
+                            <option value="2">Função</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8 mb-3">
+                        <label for="scriptName" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="scriptName">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="title">
+                </div>
+                <div class="mb-3 ">
+                    <label for="description" class="form-label">Breve descrição das alterações</label>
+                    <textarea class="form-control" id="description" rows="3"></textarea>
+                </div>
+
+            </section>
+
+            <section class="mt-2 text-secondary text-end">
+                <button type="button" class="btn btn-light border rounded" onclick="clearFields()"><i
+                        class="bi bi-eraser"> </i>Limpar</button>
+                <button type="button" class="btn btn-success" onclick="generate()"><i class="bi bi-check-circle">
+                    </i>Finalizar</button>
+            </section>
+
+        </div>
+    </div>
+
+
+    <!--Result Modal-->
+    <div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-secondary"><i class="bi bi-check-circle"> </i>Padrão Gerado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="commitMessageArea" class="form-label fw-bold text-secondary"><i class="bi bi-git">
+                            </i>Mensagem de commit:</label>
+                        <input type="text" class="form-control" id="commitMessageArea" readonly>
+                        <button type="button" class="btn btn-sm btn-primary mt-2" id="copyCommitMessage"><i
+                                class="bi bi-clipboard"> </i>Copiar</button>
+                    </div>
+                    <div class="mb-3 ">
+                        <label for="processDetailArea" class="form-label fw-bold text-secondary"><i
+                                class="bi bi-file-earmark-text-fill"> </i>Detalhamento do Processo:</label>
+                        <textarea id="processDetailArea" class="form-control" rows="10" readonly></textarea>
+                        <button type="button" class="btn btn-sm btn-primary mt-2" id="copyProcessDetail"><i
+                                class="bi bi-clipboard"> </i>Copiar</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg">
+                        </i>Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Success TOAST-->
+    <div class="toast-container top-0 end-0 p-3">
+        <div class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
+            <div class="toast-header">
+                <strong class="me-auto">Padronizador</strong>
+                <small class="text-body-secondary">Agora</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <span id="successToastMessage"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-masker@1.1.1/build/vanilla-masker.min.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+
+</html>

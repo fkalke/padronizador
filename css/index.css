@@ -1,0 +1,19 @@
+.formArea {
+    max-width: 800px;
+}
+
+.logoArea{
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+}
+
+.logotipo{
+    
+}
+
+.hidden {
+    display: none;
+}
