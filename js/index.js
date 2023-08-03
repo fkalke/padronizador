@@ -4,6 +4,7 @@
 
 var projectCheck = document.getElementById("wasCodeChange");
 var divProject = document.getElementById("divProject");
+var isRework = document.getElementById("isRework");
 
 projectCheck.addEventListener("change", function() {
   if (this.checked) {
@@ -50,6 +51,7 @@ function clearFields(){
 function generate(){
     var process = document.getElementById("process").value;
     var wasCodeChange = document.getElementById("wasCodeChange").checked;
+    var isRework = document.getElementById("isRework").checked;
     var projectName = document.getElementById("projectName").value;
     var changedScreen = document.getElementById("changedScreen").value;
     var hasScript = document.getElementById("hasScript").checked;
@@ -77,7 +79,9 @@ function generate(){
     }
 
     var commitMessage;
-    if(wasCodeChange || hasScript){
+    if((wasCodeChange || hasScript) && isRework){
+        commitMessage = `${process} - RETRABALHO - ${changeMessage} - ${title}`;
+    }else if((wasCodeChange || hasScript) && !isRework){
         commitMessage = `${process} - ${changeMessage} - ${title}`;
     }else{
         commitMessage = "Não há nada para comitar"
