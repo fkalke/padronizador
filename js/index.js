@@ -56,8 +56,6 @@ function generate() {
     var process = document.getElementById("process").value;
     var wasCodeChange = document.getElementById("wasCodeChange").checked;
     var isRework = document.getElementById("isRework").checked;
-    var projectName = document.getElementById("projectName").value;
-    var changedScreen = document.getElementById("changedScreen").value;
     var hasScript = document.getElementById("hasScript").checked;
     var scriptType = document.getElementById("scriptType").value;
     var scriptName = document.getElementById("scriptName").value;
@@ -70,11 +68,23 @@ function generate() {
 
     var commitMessage;
 
+    var projectName = ``;
+
+    if(wasCodeChange && projectsList.length > 0){
+        for (let i = 0; i < projectsList.length; i++) {
+            projectName += projectsList[i].getProject();
+            if((i + 1) < projectsList.length){
+                projectName += ', ';
+            }
+        }
+    }else{
+        projectName = "Sem alterações";
+    }
+
     if (wasCodeChange) {
         codeComittedMessage = "Sim";
     } else {
         codeComittedMessage = "Sem alterações";
-        projectName = "Sem alterações";
     }
 
     var scriptCommitedLabel;
@@ -117,7 +127,7 @@ function generate() {
         }
     }
 
-    const processDetail = `Projeto do GIT = ${projectName} \nCódigo Commitado = ${codeComittedMessage} \n${scriptCommitedLabel} = ${scriptCommitedMessage} \n${scriptNameLabel} = ${scriptName} \nResumo das alterações= ${description}`;
+    const processDetail = `Projetos do GIT = ${projectName} \nCódigo Commitado = ${codeComittedMessage} \n${scriptCommitedLabel} = ${scriptCommitedMessage} \n${scriptNameLabel} = ${scriptName} \nResumo das alterações= ${description}`;
 
     var commitMessagesArea = ``;
 
