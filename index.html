@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Padronizador</title>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+    <link rel="icon" type="image/png" href="./img/favicon.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -38,14 +39,26 @@
                         Houve alteração de código?
                     </label>
                 </div>
-                <div class="row hidden" id="divProject">
-                    <div class="col-12 col-md-6 mb-3">
-                        <label for="projectName" class="form-label">Projeto</label>
-                        <input type="text" class="form-control" id="projectName">
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                        <label for="changedScreen" class="form-label">Tela Alterada</label>
-                        <input type="text" class="form-control" id="changedScreen">
+                <div id="divProject" class="hidden">
+                    <div class="mb-3 mt-3">
+                        <div class="border rounded p-2">
+                            <div class="row">
+                                <div class="col-12 col-md-5 mb-3">
+                                    <label for="projectName" class="form-label">Projeto</label>
+                                    <input type="text" class="form-control" id="projectName">
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label for="changedScreen" class="form-label">Telas Alteradas</label>
+                                    <input type="text" class="form-control" id="changedScreen">
+                                </div>
+                                <div class="col-md-1 d-md-flex align-items-end mb-3 p-0 ps-md-2">
+                                    <button type="button" class="btn btn-primary m-0 ms-3 ms-md-0"
+                                        onclick="addProject()"><i class="bi bi-plus-circle"></i><span class="d-md-none">
+                                            Adicionar</span></button>
+                                </div>
+                            </div>
+                            <div id="projectsArea"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-check">
@@ -100,13 +113,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="commitMessageArea" class="form-label fw-bold text-secondary"><i class="bi bi-git">
-                            </i>Mensagem de commit:</label>
-                        <input type="text" class="form-control" id="commitMessageArea" readonly>
-                        <button type="button" class="btn btn-sm btn-primary mt-2" id="copyCommitMessage"><i
-                                class="bi bi-clipboard"> </i>Copiar</button>
-                    </div>
+                    <p class="fw-bold text-secondary mb-0"><i class="bi bi-git"> </i>Padrões de commits:</p>
+                    <div id="commitMessageArea" class="mb-3"></div>
                     <div class="mb-3 ">
                         <label for="processDetailArea" class="form-label fw-bold text-secondary"><i
                                 class="bi bi-file-earmark-text-fill"> </i>Detalhamento do Processo:</label>
@@ -137,10 +145,25 @@
         </div>
     </div>
 
+    <!--error TOAST-->
+    <div class="toast-container top-0 end-0 p-3">
+        <div class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="errorToast">
+            <div class="toast-header">
+                <strong class="me-auto">Padronizador</strong>
+                <small class="text-body-secondary">Agora</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <span id="errorToastMessage"></span>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanilla-masker@1.1.1/build/vanilla-masker.min.js"></script>
+    <script type="text/javascript" src="./js/Project.js"></script>
     <script type="text/javascript" src="./js/index.js"></script>
 </body>
 

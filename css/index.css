@@ -18,6 +18,10 @@
     display: none;
 }
 
+.exclude-project{
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 480px) {
     .logotipo {
         max-width: 300px;
