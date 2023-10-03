@@ -62,41 +62,17 @@ function generate() {
     var title = document.getElementById("title").value;
     var description = document.getElementById("description").value;
 
-    var codeComittedMessage;
-
     var changeMessage;
 
     var commitMessage;
 
-    var projectName = ``;
 
-    if(wasCodeChange && projectsList.length > 0){
-        for (let i = 0; i < projectsList.length; i++) {
-            projectName += projectsList[i].getProject();
-            if((i + 1) < projectsList.length){
-                projectName += ', ';
-            }
-        }
-    }else{
-        projectName = "Sem alterações";
-    }
-
-    if (wasCodeChange) {
-        codeComittedMessage = "Sim";
-    } else {
-        codeComittedMessage = "Sem alterações";
-    }
-
-    var scriptCommitedLabel;
     var scriptNameLabel;
     if (scriptType == 1) {
-        scriptCommitedLabel = "SCRIPT Commitado";
         scriptNameLabel = "Nome do SCRIPT";
     } else if (scriptType == 2) {
-        scriptCommitedLabel = "FUNÇÃO Commitada";
         scriptNameLabel = "Nome da FUNÇÃO";
     } else {
-        scriptCommitedLabel = "";
         scriptNameLabel = "";
     }
 
@@ -105,16 +81,9 @@ function generate() {
     if (hasScript) {
         scriptCommitedMessage = "Sim";
     } else {
-        scriptCommitedLabel = "SCRIPT Commitado";
         scriptNameLabel = "Nome do SCRIPT";
         scriptCommitedMessage = "Não há Script";
         scriptName = "Não há Script";
-    }
-
-    if (hasScript) {
-        changeMessage = scriptName;
-    } else {
-        changeMessage = "Sem Alt. Tela/Script";
     }
 
     function buildCommitMessage(){
@@ -127,7 +96,7 @@ function generate() {
         }
     }
 
-    const processDetail = `Projetos do GIT = ${projectName} \nCódigo Commitado = ${codeComittedMessage} \n${scriptCommitedLabel} = ${scriptCommitedMessage} \n${scriptNameLabel} = ${scriptName} \nResumo das alterações= ${description}`;
+    let processDetail = `Commits:`
 
     var commitMessagesArea = ``;
 
@@ -146,6 +115,9 @@ function generate() {
                 <input type="text" value="${commitMessage}" class="form-control" id="commitMessageAreaItem${i}" readonly>
                 <button type="button" class="btn btn-sm btn-primary mt-2" onclick="copyCommitMessageItem(${i})"><i class="bi bi-clipboard"> </i>Copiar</button>
             </div>`;
+
+            processDetail += `\n${projectsList[i].getProject()}: ${commitMessage}`;
+
         }
     } else if (!wasCodeChange && hasScript) {
         buildCommitMessage();
@@ -155,9 +127,13 @@ function generate() {
                 <input type="text" value="${commitMessage}" class="form-control" id="commitMessageAreaItem99" readonly>
                 <button type="button" class="btn btn-sm btn-primary mt-2" onclick="copyCommitMessageItem(99)"><i class="bi bi-clipboard"> </i>Copiar</button>
             </div>`;
+            processDetail += `\n${commitMessage}`;
     } else {
         commitMessagesArea += `<p class="text-secondary">Não houve alterações</p>`;
+        processDetail += `\nNão houve alterações`;
     }
+
+    processDetail += `\n\n${scriptNameLabel}: \n${scriptName} \n\nResumo das alterações: \n${description}`;
 
     document.getElementById("commitMessageArea").innerHTML = commitMessagesArea;
     document.getElementById("processDetailArea").innerHTML = processDetail;
