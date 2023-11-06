@@ -59,7 +59,7 @@ function generate() {
     var hasScript = document.getElementById("hasScript").checked;
     var scriptType = document.getElementById("scriptType").value;
     var scriptName = document.getElementById("scriptName").value;
-    var title = document.getElementById("title").value;
+    var title = document.getElementById("title").value.replaceAll('"', '&quot;');;
     var description = document.getElementById("description").value;
 
     var changeMessage;
