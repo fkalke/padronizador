@@ -40,6 +40,7 @@ scriptCheck.addEventListener("change", function () {
 
 function clearFields() {
     document.getElementById("projectName").value = "";
+    document.getElementById("tester").options[0].selected = true
     document.getElementById("wasCodeChange").checked = false;
     document.getElementById("hasScript").checked = false;
     document.getElementById("scriptType").value = 0;
@@ -54,6 +55,7 @@ function clearFields() {
 
 function generate() {
     var process = document.getElementById("process").value;
+    var tester = document.getElementById("tester");
     var wasCodeChange = document.getElementById("wasCodeChange").checked;
     var isRework = document.getElementById("isRework").checked;
     var hasScript = document.getElementById("hasScript").checked;
@@ -61,6 +63,13 @@ function generate() {
     var scriptName = document.getElementById("scriptName").value;
     var title = document.getElementById("title").value.replaceAll('"', '&quot;');;
     var description = document.getElementById("description").value;
+
+    var testerValue = tester.value;
+    if(testerValue === 'Selecione...'){
+        openErrorToast('Você precisa informar o responsável pelo teste.');
+        tester.focus();
+        return;
+    }
 
     var changeMessage;
 
@@ -88,9 +97,9 @@ function generate() {
 
     function buildCommitMessage(){
         if ((wasCodeChange || hasScript) && isRework) {
-            commitMessage = `${process} - RETRABALHO - ${changeMessage} - ${title}`;
+            commitMessage = `${process} - ${testerValue} - RETRABALHO - ${changeMessage} - ${title}`;
         } else if ((wasCodeChange || hasScript) && !isRework) {
-            commitMessage = `${process} - ${changeMessage} - ${title}`;
+            commitMessage = `${process} - ${testerValue} - ${changeMessage} - ${title}`;
         } else {
             commitMessage = "Não há nada para comitar"
         }
@@ -167,6 +176,12 @@ function openSuccessToast(message) {
     var messageElement = document.getElementById('successToastMessage');
     messageElement.innerHTML = message;
     $("#successToast").toast("show");
+}
+
+function openErrorToast(message) {
+    var messageElement = document.getElementById('errorToastMessage');
+    messageElement.innerHTML = message;
+    $("#errorToast").toast("show");
 }
 
 function addProject() {
