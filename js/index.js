@@ -9,6 +9,7 @@ let projectId = 1;
 var projectCheck = document.getElementById("wasCodeChange");
 var divProject = document.getElementById("divProject");
 var isRework = document.getElementById("isRework");
+var tester = document.getElementById("tester");
 
 projectCheck.addEventListener("change", function () {
     if (this.checked) {
@@ -34,6 +35,15 @@ scriptCheck.addEventListener("change", function () {
         divScript.style.display = "none";
         document.getElementById("scriptName").value = "";
         document.getElementById("scriptType").value = 0;
+    }
+});
+
+tester.addEventListener("change", function () {
+    if (tester.value === 'Outro') {
+        document.getElementById('divOtherTester').style.display = 'block';
+    } else {
+        document.getElementById('divOtherTester').style.display = 'none';
+        document.getElementById('otherTesterName').value = '';
     }
 });
 
@@ -69,6 +79,16 @@ function generate() {
         openErrorToast('Você precisa informar o responsável pelo teste.');
         tester.focus();
         return;
+    }else if(testerValue === 'Outro'){
+        var otherTester = document.getElementById('otherTesterName');
+        var otherTesterValue = otherTester.value;
+        if(otherTesterValue === ''){
+            openErrorToast('Você precisa informar o nome do responsável pelo teste.');
+            otherTester.focus();
+            return;
+        }else{
+            testerValue = otherTesterValue;
+        }
     }
 
     var changeMessage;
