@@ -66,6 +66,9 @@ function clearFields() {
     document.getElementById("divProject").style.display = 'none';
     document.getElementById("divScript").style.display = 'none';
 
+    document.getElementById('otherTesterName').value = "";
+    document.getElementById("divOtherTester").style.display = 'none';
+
     projectsList.length = 0;
     document.getElementById("projectName").value = "";
     document.getElementById("changedScreen").value = "";
