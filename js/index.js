@@ -1,8 +1,11 @@
 const projectsList = [];
+const scriptsList = [];
 let projectId = 1;
+let scriptId = 1;
 
 (function () {
     showProjects();
+    showScripts();
     VMasker(document.getElementById("process")).maskPattern('999999/9999');
 })();
 
@@ -28,7 +31,7 @@ var divScript = document.getElementById("divScript");
 
 scriptCheck.addEventListener("change", function () {
     if (this.checked) {
-        divScript.style.display = "flex";
+        divScript.style.display = "block";
         document.getElementById("scriptName").value = "";
         document.getElementById("scriptType").value = 0;
     } else {
@@ -49,6 +52,7 @@ tester.addEventListener("change", function () {
 
 
 function clearFields() {
+
     document.getElementById("projectName").value = "";
     document.getElementById("tester").options[0].selected = true
     document.getElementById("wasCodeChange").checked = false;
@@ -61,6 +65,17 @@ function clearFields() {
     document.getElementById("description").value = "";
     document.getElementById("divProject").style.display = 'none';
     document.getElementById("divScript").style.display = 'none';
+
+    projectsList.length = 0;
+    document.getElementById("projectName").value = "";
+    document.getElementById("changedScreen").value = "";
+    showProjects();
+
+    scriptsList.length = 0;
+    document.getElementById("scriptType").selectedIndex = 0;
+    document.getElementById("scriptName").value = "";
+    showScripts();
+
 }
 
 function generate() {
@@ -69,10 +84,14 @@ function generate() {
     var wasCodeChange = document.getElementById("wasCodeChange").checked;
     var isRework = document.getElementById("isRework").checked;
     var hasScript = document.getElementById("hasScript").checked;
-    var scriptType = document.getElementById("scriptType").value;
-    var scriptName = document.getElementById("scriptName").value;
     var title = document.getElementById("title").value.replaceAll('"', '&quot;');;
     var description = document.getElementById("description").value;
+
+    if(process == null || process.length === 0){
+        openErrorToast('Você precisa informar o número do processo.');
+        document.getElementById("process").focus();
+        return;
+    }
 
     var testerValue = tester.value;
     if(testerValue === 'Selecione...'){
@@ -91,28 +110,43 @@ function generate() {
         }
     }
 
+    if(wasCodeChange && projectsList.length === 0){
+        openErrorToast('Você precisa informar os projetos onde foram realizados os commits.');
+        return;
+    }
+
+    if(hasScript && scriptsList.length === 0){
+        openErrorToast('Você precisa informar o nome dos scripts.');
+        return;
+    }
+
+    if(title == null || title.length === 0){
+        openErrorToast('Você precisa informar um título.');
+        document.getElementById("title").focus();
+        return;
+    }
+
+    if(description == null || description.length === 0){
+        openErrorToast('Você precisa informar uma descrição das alterações.');
+        document.getElementById("description").focus();
+        return;
+    }
+
     var changeMessage;
 
     var commitMessage;
 
 
-    var scriptNameLabel;
-    if (scriptType == 1) {
-        scriptNameLabel = "Nome do SCRIPT";
-    } else if (scriptType == 2) {
-        scriptNameLabel = "Nome da FUNÇÃO";
-    } else {
-        scriptNameLabel = "";
-    }
-
-    var scriptCommitedMessage;
+    var scriptsDetails = "Scripts:";
 
     if (hasScript) {
-        scriptCommitedMessage = "Sim";
+        if (scriptsList.length > 0) {
+            for (let i = 0; i < scriptsList.length; i++) {    
+                scriptsDetails += `\n${scriptsList[i].getType()}: ${scriptsList[i].getScript()}`;    
+            }
+        }
     } else {
-        scriptNameLabel = "Nome do SCRIPT";
-        scriptCommitedMessage = "Não há Script";
-        scriptName = "Não há Script";
+        scriptsDetails += "\nNão há Scripts";
     }
 
     function buildCommitMessage(){
@@ -162,7 +196,7 @@ function generate() {
         processDetail += `\nNão houve alterações`;
     }
 
-    processDetail += `\n\n${scriptNameLabel}: \n${scriptName} \n\nResumo das alterações: \n${description}`;
+    processDetail += `\n\n${scriptsDetails} \n\nResumo das alterações: \n${description}`;
 
     document.getElementById("commitMessageArea").innerHTML = commitMessagesArea;
     document.getElementById("processDetailArea").innerHTML = processDetail;
@@ -268,4 +302,71 @@ function deleteProjectFromList(projectId) {
         }
     }
     showProjects();
+}
+
+function addScript() {
+
+    var scriptType = document.getElementById("scriptType");
+    var scriptTypeText = scriptType.options[scriptType.selectedIndex].textContent;
+    var scriptName = document.getElementById("scriptName").value;
+
+    if (scriptType == null || scriptType == undefined || scriptType.length == 0) {
+        var messageElement = document.getElementById('errorToastMessage');
+        messageElement.innerHTML = 'O campo [Tipo] não pode ser nulo.';
+        $("#errorToast").toast("show");
+        return;
+    }
+
+    if (scriptName == null || scriptName == undefined || scriptName.length == 0) {
+        var messageElement = document.getElementById('errorToastMessage');
+        messageElement.innerHTML = 'O campo [Nome] não pode ser nulo.';
+        $("#errorToast").toast("show");
+        return;
+    }
+
+    let script = new Script(scriptId, scriptTypeText, scriptName);
+    scriptId = scriptId + 1;
+
+    scriptsList.push(script);
+
+    document.getElementById("scriptType").value = '';
+    document.getElementById("scriptName").value = '';
+
+    showScripts();
+}
+
+function showScripts() {
+    var scriptsArea = document.getElementById('scriptsArea');
+    let scriptsAreaHtml = ``;
+    if (scriptsList.length > 0) {
+        for (let i = 0; i < scriptsList.length; i++) {
+            scriptsAreaHtml += `
+            <div class="border rounded mb-2 p-2 d-flex justify-content-between">
+                <div class="m-0 p-0 d-flex">
+                    <p class="text-center m-0 p-0">${scriptsList[i].getType()}</p>
+                    <span>&nbsp;|&nbsp;</span>
+                    <p class="text-center m-0 p-0">${scriptsList[i].getScript()}</p>
+                </div>
+                <div class="m-0 p-0 text-danger">
+                    <div class="m-0 p-0 exclude-script" onclick="deleteScriptFromList(${scriptsList[i].getId()})"><i class="bi bi-trash3"></i></div>
+                </div>
+            </div>
+            `;
+        }
+    } else {
+        scriptsAreaHtml += `
+        <div class="border rounded mb-2 p-2">
+            <p class="text-center m-0 p-0">Nenhum script adicionado</p>
+        </div>`;
+    }
+    scriptsArea.innerHTML = scriptsAreaHtml;
+}
+
+function deleteScriptFromList(scriptId) {
+    for (let i = 0; i < scriptsList.length; i++) {
+        if (scriptsList[i].id === scriptId) {
+            scriptsList.splice(i, 1);
+        }
+    }
+    showScripts();
 }

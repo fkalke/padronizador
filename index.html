@@ -24,7 +24,7 @@
             <section class="mt-3 text-secondary">
 
                 <div class="mb-3">
-                    <label for="process" class="form-label">Número do processo</label>
+                    <label for="process" class="form-label">Número do processo <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="process">
                 </div>
                 <div class="mb-3">
@@ -85,26 +85,38 @@
                         Tem script?
                     </label>
                 </div>
-                <div class="row hidden" id="divScript">
-                    <div class="col-12 col-md-4 mb-3">
-                        <label for="scriptName" class="form-label">Tipo</label>
-                        <select class="form-select mb-3 text-secondary" id="scriptType">
-                            <option selected>Selecione...</option>
-                            <option value="1">Script</option>
-                            <option value="2">Função</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-8 mb-3">
-                        <label for="scriptName" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="scriptName">
+                <div id="divScript" class="hidden">
+                    <div class="mb-3 mt-3">
+                        <div class="border rounded p-2">
+                            <div class="row">
+                                <div class="col-12 col-md-3 mb-3">
+                                    <label for="scriptType" class="form-label">Tipo</label>
+                                    <select class="form-select text-secondary" id="scriptType">
+                                        <option selected>Selecione...</option>
+                                        <option value="1">Script</option>
+                                        <option value="2">Função</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-8 mb-3">
+                                    <label for="scriptName" class="form-label">Nome</label>
+                                    <input type="text" class="form-control" id="scriptName">
+                                </div>
+                                <div class="col-md-1 d-md-flex align-items-end mb-3 p-0 ps-md-2">
+                                    <button type="button" class="btn btn-primary m-0 ms-3 ms-md-0" onclick="addScript()">
+                                        <i class="bi bi-plus-circle"></i><span class="d-md-none">Adicionar</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="scriptsArea"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="title" class="form-label">Título</label>
+                    <label for="title" class="form-label">Título <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="title">
                 </div>
                 <div class="mb-3 ">
-                    <label for="description" class="form-label">Breve descrição das alterações</label>
+                    <label for="description" class="form-label">Breve descrição das alterações <span class="text-danger">*</span></label>
                     <textarea class="form-control" id="description" rows="3"></textarea>
                 </div>
 
@@ -182,6 +194,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanilla-masker@1.1.1/build/vanilla-masker.min.js"></script>
     <script type="text/javascript" src="./js/Project.js"></script>
+    <script type="text/javascript" src="./js/Script.js"></script>
     <script type="text/javascript" src="./js/index.js"></script>
 </body>
 
