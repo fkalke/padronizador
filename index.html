@@ -23,9 +23,15 @@
 
             <section class="mt-3 text-secondary">
 
-                <div class="mb-3">
-                    <label for="process" class="form-label">Número do processo <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="process">
+                <div class="d-md-flex gap-2">
+                    <div class="mb-3 col-12 col-md-3">
+                        <label for="process" class="form-label">Número do processo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="process">
+                    </div>
+                    <div class="mb-3 w-100">
+                        <label for="title" class="form-label">Título <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title">
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="tester" class="form-label">Responsável pelo teste <span class="text-danger">*</span></label>
@@ -111,10 +117,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="title" class="form-label">Título <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="title">
-                </div>
                 <div class="mb-3 ">
                     <label for="description" class="form-label">Breve descrição das alterações <span class="text-danger">*</span></label>
                     <textarea class="form-control" id="description" rows="3"></textarea>
@@ -125,7 +127,7 @@
             <section class="mt-2 text-secondary text-end">
                 <button type="button" class="btn btn-light border rounded" onclick="clearFields()"><i
                         class="bi bi-eraser"> </i>Limpar</button>
-                <button type="button" class="btn btn-success" onclick="generate()"><i class="bi bi-check-circle">
+                <button type="button" class="btn btn-primary" onclick="generate()"><i class="bi bi-check-circle">
                     </i>Finalizar</button>
             </section>
 
