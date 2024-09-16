@@ -1,18 +1,27 @@
 const projectsList = [];
+const reportsList = [];
 const scriptsList = [];
 let projectId = 1;
+let reportId = 1;
 let scriptId = 1;
+
+var cabecalho = document.getElementById("cabecalho");
+var conteudo = document.getElementById("conteudo");
+var rodape = document.getElementById("rodape");
+
+const headerFooterHeigth = cabecalho.offsetHeight + rodape.offsetHeight;
 
 (function () {
     showProjects();
+    showReports();
     showScripts();
     VMasker(document.getElementById("process")).maskPattern('999999/9999');
+    conteudo.style.minHeight = `calc(100vh - ${headerFooterHeigth}px)`;
 })();
 
 var projectCheck = document.getElementById("wasCodeChange");
 var divProject = document.getElementById("divProject");
 var isRework = document.getElementById("isRework");
-var tester = document.getElementById("tester");
 
 projectCheck.addEventListener("change", function () {
     if (this.checked) {
@@ -28,19 +37,45 @@ projectCheck.addEventListener("change", function () {
 
 var scriptCheck = document.getElementById("hasScript");
 var divScript = document.getElementById("divScript");
-
 scriptCheck.addEventListener("change", function () {
     if (this.checked) {
         divScript.style.display = "block";
         document.getElementById("scriptName").value = "";
-        document.getElementById("scriptType").value = 0;
     } else {
         divScript.style.display = "none";
         document.getElementById("scriptName").value = "";
-        document.getElementById("scriptType").value = 0;
     }
 });
 
+var reportCheck = document.getElementById("hasReport");
+var divReport = document.getElementById("divReport");
+reportCheck.addEventListener("change", function () {
+    if (this.checked) {
+        divReport.style.display = "block";
+        document.getElementById("reportUpdatedReasonField").style.display = "none";
+        document.getElementById("reportName").value = "";
+        document.getElementById("updated").value = 'Sim';
+    } else {
+        divReport.style.display = "none";
+        document.getElementById("reportUpdatedReasonField").style.display = "none";
+        document.getElementById("reportName").value = "";
+        document.getElementById("updated").value = 'Sim';
+    }
+});
+
+var updated = document.getElementById("updated");
+var reportUpdatedReasonField = document.getElementById("reportUpdatedReasonField");
+updated.addEventListener("change", function () {
+    if (this.value == 'Não') {
+        reportUpdatedReasonField.style.display = "block";
+        document.getElementById("motivo").value = "";
+    }else{
+        reportUpdatedReasonField.style.display = "none";
+        document.getElementById("motivo").value = "";
+    }
+});
+
+var tester = document.getElementById("tester");
 tester.addEventListener("change", function () {
     if (tester.value === 'Outro') {
         document.getElementById('divOtherTester').style.display = 'block';
@@ -56,14 +91,15 @@ function clearFields() {
     document.getElementById("projectName").value = "";
     document.getElementById("tester").options[0].selected = true
     document.getElementById("wasCodeChange").checked = false;
+    document.getElementById("hasReport").checked = false;
     document.getElementById("hasScript").checked = false;
-    document.getElementById("scriptType").value = 0;
     document.getElementById("changedScreen").value = "";
     document.getElementById("process").value = "";
     document.getElementById("scriptName").value = "";
     document.getElementById("title").value = "";
     document.getElementById("description").value = "";
     document.getElementById("divProject").style.display = 'none';
+    document.getElementById("divReport").style.display = 'none';
     document.getElementById("divScript").style.display = 'none';
 
     document.getElementById('otherTesterName').value = "";
@@ -74,8 +110,14 @@ function clearFields() {
     document.getElementById("changedScreen").value = "";
     showProjects();
 
+    reportsList.length = 0;
+    document.getElementById("reportName").value = "";
+    document.getElementById("updated").value = "Sim";
+    document.getElementById("reportUpdatedReasonField").style.display = 'none';
+    document.getElementById("motivo").value = "Sim";
+    showReports();
+
     scriptsList.length = 0;
-    document.getElementById("scriptType").selectedIndex = 0;
     document.getElementById("scriptName").value = "";
     showScripts();
 
@@ -86,6 +128,7 @@ function generate() {
     var tester = document.getElementById("tester");
     var wasCodeChange = document.getElementById("wasCodeChange").checked;
     var isRework = document.getElementById("isRework").checked;
+    var hasReport = document.getElementById("hasReport").checked;
     var hasScript = document.getElementById("hasScript").checked;
     var title = document.getElementById("title").value.replaceAll('"', '&quot;');;
     var description = document.getElementById("description").value;
@@ -118,6 +161,11 @@ function generate() {
         return;
     }
 
+    if(hasReport && reportsList.length === 0){
+        openErrorToast('Você precisa informar os relatórios que sofreram alterações.');
+        return;
+    }
+
     if(hasScript && scriptsList.length === 0){
         openErrorToast('Você precisa informar o nome dos scripts.');
         return;
@@ -139,13 +187,12 @@ function generate() {
 
     var commitMessage;
 
-
     var scriptsDetails = "Scripts:";
 
     if (hasScript) {
         if (scriptsList.length > 0) {
             for (let i = 0; i < scriptsList.length; i++) {    
-                scriptsDetails += `\n${scriptsList[i].getType()}: ${scriptsList[i].getScript()}`;    
+                scriptsDetails += `\n${scriptsList[i].getScript()}`;    
             }
         }
     } else {
@@ -175,45 +222,60 @@ function generate() {
             
             buildCommitMessage();
 
+
+
             commitMessagesArea += `
             <div class="mb-3">
-                <label for="commitMessageAreaItem${i}" class="form-label text-secondary">Commit em ${projectsList[i].getProject()}</label>
-                <input type="text" value="${commitMessage}" class="form-control" id="commitMessageAreaItem${i}" readonly>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="copyCommitMessageItem(${i})"><i class="bi bi-clipboard"> </i>Copiar</button>
+                <label for="commitMessageAreaItem${i}" class="form-label label-campo-commits-modal">Commit em ${projectsList[i].getProject()}</label>
+                <input type="text" value="${commitMessage}" class="form-control campo-commits-modal" id="commitMessageAreaItem${i}" readonly>
+                <button id="btnCopiarMsg${i}" type="button" class="botao-copiar" onclick="copyCommitMessageItem(${i})"><img src="./img/icone-copiar.svg" class="me-2">Copiar</button>
             </div>`;
 
             processDetail += `\n${projectsList[i].getProject()}: ${commitMessage}`;
 
         }
-    } else if (!wasCodeChange && hasScript) {
-        buildCommitMessage();
-        commitMessagesArea += `
-            <div class="mb-3">
-                <label for="commitMessageAreaItem99" class="form-label text-secondary">Commit em cpe-jdk-scripts</label>
-                <input type="text" value="${commitMessage}" class="form-control" id="commitMessageAreaItem99" readonly>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="copyCommitMessageItem(99)"><i class="bi bi-clipboard"> </i>Copiar</button>
-            </div>`;
-            processDetail += `\n${commitMessage}`;
     } else {
         commitMessagesArea += `<p class="text-secondary">Não houve alterações</p>`;
         processDetail += `\nNão houve alterações`;
     }
 
-    processDetail += `\n\n${scriptsDetails} \n\nResumo das alterações: \n${description}`;
+    processDetail += `\n\n${scriptsDetails}`;
+
+    var reportDetails = "\n\nRelatórios:"
+
+    if(hasReport) {
+        if(reportsList.length > 0){
+            for (let i = 0; i < reportsList.length; i++) {    
+                reportDetails += `\n${reportsList[i].getReport()}`;    
+                if(reportsList[i].getIsUpdated() == "Não"){
+                    reportDetails += ` (Não atualizado. Motivo: ${reportsList[i].getReason()})`;
+                }else{
+                    reportDetails += ` (Atualizado em produção)`;
+                }
+            }
+            processDetail += reportDetails;
+        }
+    }
+
+    processDetail += `\n\nResumo das alterações: \n${description}`;
+
+    var processDetailArea = document.getElementById("processDetailArea")
+    const linhasTextArea = processDetail.split('\n');
+    processDetailArea.rows = linhasTextArea.length;
 
     document.getElementById("commitMessageArea").innerHTML = commitMessagesArea;
-    document.getElementById("processDetailArea").innerHTML = processDetail;
+    processDetailArea.innerHTML = processDetail;
 
     if (validateFields()) {
+        manipularBotaoCopiar(false, 'copyProcessDetail');
         $("#resultModal").modal("show");
     }
 }
 
-
 function copyCommitMessageItem(itemId) {
     var commitMessage = document.getElementById("commitMessageAreaItem" + itemId);
     navigator.clipboard.writeText(commitMessage.value);
-    openSuccessToast('Mensagem de commit copiada com sucesso!');
+    manipularBotaoCopiar(true, 'btnCopiarMsg' + itemId);
 }
 
 function validateFields() {
@@ -223,11 +285,21 @@ function validateFields() {
 var btnCopyProcessDetail = document.getElementById("copyProcessDetail");
 btnCopyProcessDetail.addEventListener('click', (e) => {
     e.preventDefault();
+
+    manipularBotaoCopiar(true, 'copyProcessDetail');
+
     var processDetail = document.getElementById("processDetailArea");
     navigator.clipboard.writeText(processDetail.value);
-    openSuccessToast('Detalhamento copiado com sucesso!');
 
 });
+
+function manipularBotaoCopiar(isCopiado, idBotao){
+    var icone = isCopiado ? './img/icone-copiado.svg' : './img/icone-copiar.svg';
+    var texto = isCopiado ? 'Copiado' : 'Copiar';
+    var botaoCopiar = document.getElementById(idBotao);
+    botaoCopiar.innerHTML = `<img src="${icone}" class="me-2"> ${texto}`;
+    botaoCopiar.className = isCopiado ? 'botao-copiado' : 'botao-copiar';
+}
 
 function openSuccessToast(message) {
     var messageElement = document.getElementById('successToastMessage');
@@ -277,21 +349,19 @@ function showProjects() {
     if (projectsList.length > 0) {
         for (let i = 0; i < projectsList.length; i++) {
             projectAreaHtml += `
-            <div class="border rounded mb-2 p-2 d-flex justify-content-between">
-                <div class="m-0 p-0 d-flex">
+            <div class="area-projetos-adicionados-item">
+                <div class="area-projetos-adicionados">
                     <p class="text-center m-0 p-0">${projectsList[i].getProject()}</p>
                     <span>&nbsp;|&nbsp;</span>
                     <p class="text-center m-0 p-0">${projectsList[i].getScreen()}</p>
                 </div>
-                <div class="m-0 p-0 text-danger">
-                    <div class="m-0 p-0 exclude-project" onclick="deleteProjectFromList(${projectsList[i].getId()})"><i class="bi bi-trash3"></i></div>
-                </div>
+                <button class="exclude-project btn-excluir" onclick="deleteProjectFromList(${projectsList[i].getId()})"><img src="./img/btn-excluir.svg" class="me-2"/>Excluir</button>
             </div>
             `;
         }
     } else {
         projectAreaHtml += `
-        <div class="border rounded mb-2 p-2">
+        <div class="area-sem-projetos">
             <p class="text-center m-0 p-0">Nenhum projeto adicionado</p>
         </div>`;
     }
@@ -307,18 +377,73 @@ function deleteProjectFromList(projectId) {
     showProjects();
 }
 
-function addScript() {
+function addReport() {
 
-    var scriptType = document.getElementById("scriptType");
-    var scriptTypeText = scriptType.options[scriptType.selectedIndex].textContent;
-    var scriptName = document.getElementById("scriptName").value;
+    var messageElement = document.getElementById('errorToastMessage');
+    var reportName = document.getElementById("reportName").value;
+    var updated = document.getElementById("updated").value;
+    var reason = document.getElementById("motivo").value;
 
-    if (scriptType == null || scriptType == undefined || scriptType.length == 0) {
-        var messageElement = document.getElementById('errorToastMessage');
-        messageElement.innerHTML = 'O campo [Tipo] não pode ser nulo.';
+    if (reportName == null || reportName == undefined || reportName.length == 0) {
+        messageElement.innerHTML = 'O campo [Nome Relatório] não pode ser nulo.';
         $("#errorToast").toast("show");
         return;
     }
+
+    if(updated == "Não" && (reason == null || reason == undefined || reason.length == 0)){
+        messageElement.innerHTML = 'O campo [Motivo] não pode ser nulo.';
+        $("#errorToast").toast("show");
+        return;
+    }
+
+    let report = new Report(reportId, reportName, updated, reason);
+    reportId = reportId + 1;
+
+    reportsList.push(report);
+
+    document.getElementById("reportName").value = '';
+    document.getElementById("updated").value = 'Sim';
+    document.getElementById("motivo").value = '';
+    document.getElementById("reportUpdatedReasonField").style.display = "none";
+
+    showReports();
+}
+
+function showReports() {
+    var reportsArea = document.getElementById('reportsArea');
+    let reportsAreaHtml = ``;
+    if (reportsList.length > 0) {
+        for (let i = 0; i < reportsList.length; i++) {
+            reportsAreaHtml += `
+            <div class="area-projetos-adicionados-item">
+                <div class="area-projetos-adicionados">
+                    <p class="text-center m-0 p-0">${reportsList[i].getReport()}</p>
+                </div>
+                <button class="exclude-project btn-excluir" onclick="deleteReportFromList(${reportsList[i].getId()})"><img src="./img/btn-excluir.svg" class="me-2"/>Excluir</button>
+            </div>
+            `;
+        }
+    } else {
+        reportsAreaHtml += `
+        <div class="area-sem-projetos">
+            <p class="text-center m-0 p-0">Nenhum relatório adicionado</p>
+        </div>`;
+    }
+    reportsArea.innerHTML = reportsAreaHtml;
+}
+
+function deleteReportFromList(reportId) {
+    for (let i = 0; i < reportsList.length; i++) {
+        if (reportsList[i].id === reportId) {
+            reportsList.splice(i, 1);
+        }
+    }
+    showReports();
+}
+
+function addScript() {
+
+    var scriptName = document.getElementById("scriptName").value;
 
     if (scriptName == null || scriptName == undefined || scriptName.length == 0) {
         var messageElement = document.getElementById('errorToastMessage');
@@ -327,12 +452,11 @@ function addScript() {
         return;
     }
 
-    let script = new Script(scriptId, scriptTypeText, scriptName);
+    let script = new Script(scriptId, scriptName);
     scriptId = scriptId + 1;
 
     scriptsList.push(script);
 
-    document.getElementById("scriptType").value = '';
     document.getElementById("scriptName").value = '';
 
     showScripts();
@@ -344,21 +468,17 @@ function showScripts() {
     if (scriptsList.length > 0) {
         for (let i = 0; i < scriptsList.length; i++) {
             scriptsAreaHtml += `
-            <div class="border rounded mb-2 p-2 d-flex justify-content-between">
-                <div class="m-0 p-0 d-flex">
-                    <p class="text-center m-0 p-0">${scriptsList[i].getType()}</p>
-                    <span>&nbsp;|&nbsp;</span>
+            <div class="area-projetos-adicionados-item">
+                <div class="area-projetos-adicionados">
                     <p class="text-center m-0 p-0">${scriptsList[i].getScript()}</p>
                 </div>
-                <div class="m-0 p-0 text-danger">
-                    <div class="m-0 p-0 exclude-script" onclick="deleteScriptFromList(${scriptsList[i].getId()})"><i class="bi bi-trash3"></i></div>
-                </div>
+                <button class="exclude-project btn-excluir" onclick="deleteScriptFromList(${scriptsList[i].getId()})"><img src="./img/btn-excluir.svg" class="me-2"/>Excluir</button>
             </div>
             `;
         }
     } else {
         scriptsAreaHtml += `
-        <div class="border rounded mb-2 p-2">
+        <div class="area-sem-projetos">
             <p class="text-center m-0 p-0">Nenhum script adicionado</p>
         </div>`;
     }

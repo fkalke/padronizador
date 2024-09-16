@@ -14,150 +14,176 @@
 </head>
 
 <body>
-    <div class="d-flex row justify-content-center m-0">
-        <div class="formArea p-3">
+    <header id="cabecalho" class="cabecalho">
+        <img src="./img/logo.svg" alt="logo-padronizador">
+    </header>
+    <div id="conteudo" class="d-flex row justify-content-center m-0 area-conteudo">
+        <div class="formArea">
+            <section class="mt-3 text-secondary area-campos-formulario">
 
-            <section class="logoArea">
-                <img src="./img/logotipo.png" class="logotipo">
-            </section>
-
-            <section class="mt-3 text-secondary">
-
-                <div class="d-md-flex gap-2">
-                    <div class="mb-3 col-12 col-md-3">
-                        <label for="process" class="form-label">Número do processo <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="process">
+                <div class="d-md-flex gap-4 bloco-campo">
+                    <div class="mb-3 col-12 col-md-4">
+                        <label for="process" class="form-label label-campo-formulario">Número do processo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control campo-formulario" id="process">
                     </div>
-                    <div class="mb-3 w-100">
-                        <label for="title" class="form-label">Título <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="title">
+                    <div class="w-100">
+                        <label for="title" class="form-label label-campo-formulario">Título <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control campo-formulario" id="title">
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="tester" class="form-label">Responsável pelo teste <span class="text-danger">*</span></label>
-                    <select class="form-select" id="tester">
-                        <option value="Selecione..." selected>Selecione...</option>
-                        <option value="Thamires">Thamires</option>
-                        <option value="Daniela">Daniela</option>
-                        <option value="Milena">Milena</option>
-                        <option value="Sabrina">Sabrina</option>
-                        <option value="Jackson">Jackson</option>
-                        <option value="Outro">Outro</option>
+
+                <div class="bloco-campo">
+                    <label for="tester" class="form-label label-campo-formulario">Responsável pelo teste <span class="text-danger">*</span></label>
+                    <select class="form-select campo-formulario" id="tester">
+                        <option value="Selecione..." selected class="label-campo-formulario">Selecione...</option>
+                        <option value="Daniela" class="label-campo-formulario">Daniela</option>
+                        <option value="Sabrina" class="label-campo-formulario">Sabrina</option>
+                        <option value="Thamires" class="label-campo-formulario">Thamires</option>
+                        <option value="Outro" class="label-campo-formulario">Outro</option>
                     </select>
                 </div>
-                <div class="mb-3 hidden" id="divOtherTester">
+
+                <div class="hidden bloco-campo" id="divOtherTester">
                     <div class="col-12">
-                        <label for="otherTesterName" class="form-label">Nome do Responsável pelo teste  <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="otherTesterName">
+                        <label for="otherTesterName" class="form-label label-campo-formulario">Nome do Responsável pelo teste  <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control campo-formulario" id="otherTesterName">
                     </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="isRework">
-                    <label class="form-check-label" for="isRework">
-                        Retrabalho?
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="wasCodeChange">
-                    <label class="form-check-label" for="wasCodeChange">
-                        Houve alteração de código?
-                    </label>
-                </div>
-                <div id="divProject" class="hidden">
-                    <div class="mb-3 mt-3">
-                        <div class="border rounded p-2">
-                            <div class="row">
-                                <div class="col-12 col-md-5 mb-3">
-                                    <label for="projectName" class="form-label">Projeto</label>
-                                    <input type="text" class="form-control" id="projectName">
+
+                <div class="area-checkbox bloco-campo">
+                    <div class="form-check area-checkbox-item">
+                        <input class="form-check-input check-box me-2" type="checkbox" id="isRework">
+                        <label class="form-check-label label-campo-formulario" for="isRework">
+                            Retrabalho
+                        </label>
+                    </div>
+                    <div class="form-check area-checkbox-item">
+                        <input class="form-check-input check-box me-2" type="checkbox" id="wasCodeChange">
+                        <label class="form-check-label label-campo-formulario" for="wasCodeChange">
+                            Houve alteração de código
+                        </label>
+                    </div>
+                    <div id="divProject" class="hidden">
+                        <div class="mb-3 mt-3">
+                            <div class="area-projetos">
+                                <div class="form-projetos-adicionados">
+                                    <div class="fields-form-projetos-adicionados">
+                                        <div class="mb-3 w-100">
+                                            <label for="projectName" class="form-label label-campo-formulario-card">Projeto</label>
+                                            <input type="text" class="form-control campo-formulario" id="projectName">
+                                        </div>
+                                        <div class="mb-3 w-100">
+                                            <label for="changedScreen" class="form-label label-campo-formulario-card">Telas Alteradas</label>
+                                            <input type="text" class="form-control campo-formulario" id="changedScreen">
+                                        </div>
+                                    </div>
+                                    <div class="m-0 p-0">
+                                        <button type="button" class="btn-adicionar" onclick="addProject()"><img src="./img/btn-adicionar.svg" class="me-2"/>Adicionar</button>
+                                    </div>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
-                                    <label for="changedScreen" class="form-label">Telas Alteradas</label>
-                                    <input type="text" class="form-control" id="changedScreen">
-                                </div>
-                                <div class="col-md-1 d-md-flex align-items-end mb-3 p-0 ps-md-2">
-                                    <button type="button" class="btn btn-primary m-0 ms-3 ms-md-0"
-                                        onclick="addProject()"><i class="bi bi-plus-circle"></i><span class="d-md-none">
-                                            Adicionar</span></button>
-                                </div>
+                                <div id="projectsArea" class="container-projetos-adicionados"></div>
                             </div>
-                            <div id="projectsArea"></div>
                         </div>
                     </div>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="true" id="hasScript">
-                    <label class="form-check-label" for="hasScript">
-                        Tem script?
-                    </label>
-                </div>
-                <div id="divScript" class="hidden">
-                    <div class="mb-3 mt-3">
-                        <div class="border rounded p-2">
-                            <div class="row">
-                                <div class="col-12 col-md-3 mb-3">
-                                    <label for="scriptType" class="form-label">Tipo</label>
-                                    <select class="form-select text-secondary" id="scriptType">
-                                        <option selected>Selecione...</option>
-                                        <option value="1">Script</option>
-                                        <option value="2">Função</option>
-                                    </select>
+                    <div class="form-check area-checkbox-item">
+                        <input class="form-check-input check-box me-2" type="checkbox" value="true" id="hasReport">
+                        <label class="form-check-label label-campo-formulario" for="hasReport">
+                            Houve alterações em relatórios
+                        </label>
+                    </div>
+                    <div id="divReport" class="hidden">
+                        <div class="mb-3 mt-3">
+                            <div class="area-projetos">
+                                <div class="form-projetos-adicionados">
+                                    <div class="d-flex w-100 gap-3">
+                                        <div class="mb-3 w-100">
+                                            <label for="reportName" class="form-label label-campo-formulario-card">Nome do relatório</label>
+                                            <input type="text" class="form-control campo-formulario" id="reportName">
+                                        </div>
+                                        <div class="mb-3 w-100">
+                                            <label for="updated" class="form-label label-campo-formulario-card">Atualizado no produção</label>
+                                            <select class="form-select campo-formulario" id="updated">
+                                                <option value="Sim" selected class="label-campo-formulario">Sim</option>
+                                                <option value="Não" class="label-campo-formulario">Não</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-12 col-md-8 mb-3">
-                                    <label for="scriptName" class="form-label">Nome</label>
-                                    <input type="text" class="form-control" id="scriptName">
+                                <div id="reportUpdatedReasonField" class="mb-3 w-100 hidden">
+                                    <label for="motivo" class="form-label label-campo-formulario-card">Motivo <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control campo-formulario" id="motivo">
                                 </div>
-                                <div class="col-md-1 d-md-flex align-items-end mb-3 p-0 ps-md-2">
-                                    <button type="button" class="btn btn-primary m-0 ms-3 ms-md-0" onclick="addScript()">
-                                        <i class="bi bi-plus-circle"></i><span class="d-md-none">Adicionar</span>
-                                    </button>
+                                <div class="mb-3 p-0">
+                                    <button type="button" class="btn-adicionar" onclick="addReport()"><img src="./img/btn-adicionar.svg" class="me-2"/>Adicionar</button>
                                 </div>
+                                <div id="reportsArea" class="container-projetos-adicionados"></div>
                             </div>
-                            <div id="scriptsArea"></div>
+                        </div>
+                    </div>
+                    <div class="form-check area-checkbox-item">
+                        <input class="form-check-input check-box me-2" type="checkbox" value="true" id="hasScript">
+                        <label class="form-check-label label-campo-formulario" for="hasScript">
+                            Tem script
+                        </label>
+                    </div>
+                    <div id="divScript" class="hidden">
+                        <div class="mb-3 mt-3">
+                            <div class="area-projetos">
+                                <div class="form-projetos-adicionados">
+                                    <div class="fields-form-projetos-adicionados">
+                                        <div class="mb-3 w-100">
+                                            <label for="scriptName" class="form-label label-campo-formulario">Nome</label>
+                                            <input type="text" class="form-control campo-formulario" id="scriptName">
+                                        </div>
+                                    </div>
+                                    <div class="m-0 p-0">
+                                        <button type="button" class="btn-adicionar" onclick="addScript()"><img src="./img/btn-adicionar.svg" class="me-2"/>Adicionar</button>
+                                    </div>
+                                </div>
+                                <div id="scriptsArea" class="container-projetos-adicionados"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="mb-3 ">
-                    <label for="description" class="form-label">Breve descrição das alterações <span class="text-danger">*</span></label>
-                    <textarea class="form-control" id="description" rows="3"></textarea>
+                    <label for="description" class="form-label label-campo-formulario">Breve descrição das alterações <span class="text-danger">*</span></label>
+                    <textarea class="form-control text-area" id="description" rows="3"></textarea>
                 </div>
 
             </section>
 
             <section class="mt-2 text-secondary text-end">
-                <button type="button" class="btn btn-light border rounded" onclick="clearFields()"><i
-                        class="bi bi-eraser"> </i>Limpar</button>
-                <button type="button" class="btn btn-primary" onclick="generate()"><i class="bi bi-check-circle">
-                    </i>Finalizar</button>
+                <button type="button" class="botao-limpar" onclick="clearFields()"><svg width="20" height="19" viewBox="0 0 20 19" class="icone-limpar me-2" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.3424 12.3138L8.09944 8.07079L2.44244 13.7278L4.56444 15.8488C5.12703 16.4112 5.88995 16.7271 6.68544 16.7271C7.48094 16.7271 8.24386 16.4112 8.80644 15.8488L12.3424 12.3138ZM10.8984 16.5858H13.6144C13.8797 16.5858 14.134 16.6911 14.3216 16.8787C14.5091 17.0662 14.6144 17.3206 14.6144 17.5858C14.6144 17.851 14.5091 18.1054 14.3216 18.2929C14.134 18.4804 13.8797 18.5858 13.6144 18.5858H2.61444C2.36091 18.5856 2.11693 18.4891 1.93185 18.3158C1.74678 18.1425 1.63443 17.9054 1.61753 17.6524C1.60063 17.3995 1.68045 17.1495 1.84083 16.9532C2.00122 16.7568 2.2302 16.6287 2.48144 16.5948L1.02844 15.1418C0.653502 14.7667 0.442871 14.2581 0.442871 13.7278C0.442871 13.1975 0.653502 12.6888 1.02844 12.3138L12.3424 0.999788C12.7175 0.624846 13.2261 0.414215 13.7564 0.414215C14.2868 0.414215 14.7954 0.624846 15.1704 0.999788L19.4144 5.24279C19.7894 5.61784 20 6.12646 20 6.65679C20 7.18712 19.7894 7.69573 19.4144 8.07079L10.8984 16.5858Z"/>
+                    </svg>Limpar</button>
+                <button type="button" class="botao-finalizar" onclick="generate()"><img src="./img/icone-check.svg" class="me-2">Finalizar</button>
             </section>
 
         </div>
     </div>
+    <footer id="rodape" class="rodape">
+        <p class="col-6">CPE - Padronizador</p>
+        <p class="col-6">Versão: 2.0.1</p>
+    </footer>
 
 
     <!--Result Modal-->
     <div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-padrao-gerado modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-secondary"><i class="bi bi-check-circle"> </i>Padrão Gerado</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="fw-bold text-secondary mb-0"><i class="bi bi-git"> </i>Padrões de commits:</p>
-                    <div id="commitMessageArea" class="mb-3"></div>
-                    <div class="mb-3 ">
-                        <label for="processDetailArea" class="form-label fw-bold text-secondary"><i
-                                class="bi bi-file-earmark-text-fill"> </i>Detalhamento do Processo:</label>
-                        <textarea id="processDetailArea" class="form-control" rows="10" readonly></textarea>
-                        <button type="button" class="btn btn-sm btn-primary mt-2" id="copyProcessDetail"><i
-                                class="bi bi-clipboard"> </i>Copiar</button>
+                <div class="modal-body corpo-modal">
+                    <div class="header-modal">
+                        <img src="./img/titulo-modal.svg" class="img-titulo-modal"/>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg">
-                        </i>Fechar</button>
+                    <p class="texto-principal-modal"><img src="./img/logo-git.svg" class="me-2">Padrões de commits:</p>
+                    <div id="commitMessageArea" class="area-msg-commits"></div>
+                    <div>
+                        <label for="processDetailArea" class="form-label texto-principal-modal"><img src="./img/icone-folha.svg" class="me-2">Detalhamento do Processo:</label>
+                        <textarea id="processDetailArea" class="form-control text-area-modal" rows="1" readonly></textarea>
+                        <button type="button" class="botao-copiar" id="copyProcessDetail"><img src="./img/icone-copiar.svg" class="me-2">Copiar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -196,6 +222,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanilla-masker@1.1.1/build/vanilla-masker.min.js"></script>
     <script type="text/javascript" src="./js/Project.js"></script>
+    <script type="text/javascript" src="./js/Report.js"></script>
     <script type="text/javascript" src="./js/Script.js"></script>
     <script type="text/javascript" src="./js/index.js"></script>
 </body>
