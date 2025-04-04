@@ -89,6 +89,7 @@ tester.addEventListener("change", function () {
 function clearFields() {
 
     document.getElementById("projectName").value = "";
+    document.getElementById("type").options[0].selected = true;
     document.getElementById("tester").options[0].selected = true
     document.getElementById("wasCodeChange").checked = false;
     document.getElementById("hasReport").checked = false;
@@ -125,6 +126,7 @@ function clearFields() {
 
 function generate() {
     var process = document.getElementById("process").value;
+    var type = document.getElementById("type");
     var tester = document.getElementById("tester");
     var wasCodeChange = document.getElementById("wasCodeChange").checked;
     var isRework = document.getElementById("isRework").checked;
@@ -136,6 +138,13 @@ function generate() {
     if(process == null || process.length === 0){
         openErrorToast('Você precisa informar o número do processo.');
         document.getElementById("process").focus();
+        return;
+    }
+
+    var typeValue = type.value;
+    if(typeValue === 'Selecione...'){
+        openErrorToast('Você precisa informar o tipo.');
+        type.focus();
         return;
     }
 
@@ -201,9 +210,9 @@ function generate() {
 
     function buildCommitMessage(){
         if ((wasCodeChange || hasScript) && isRework) {
-            commitMessage = `${process} - ${testerValue} - RETRABALHO - ${changeMessage} - ${title}`;
+            commitMessage = `${process} - ${typeValue} - ${testerValue} - RETRABALHO - ${changeMessage} - ${title}`;
         } else if ((wasCodeChange || hasScript) && !isRework) {
-            commitMessage = `${process} - ${testerValue} - ${changeMessage} - ${title}`;
+            commitMessage = `${process} - ${typeValue} - ${testerValue} - ${changeMessage} - ${title}`;
         } else {
             commitMessage = "Não há nada para comitar"
         }
