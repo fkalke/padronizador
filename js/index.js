@@ -210,9 +210,9 @@ function generate() {
 
     function buildCommitMessage(){
         if ((wasCodeChange || hasScript) && isRework) {
-            commitMessage = `${process} - ${typeValue} - ${testerValue} - RETRABALHO - ${changeMessage} - ${title}`;
+            commitMessage = `${process} - ${testerValue} - RETRABALHO - ${changeMessage} - ${typeValue} - ${title}`;
         } else if ((wasCodeChange || hasScript) && !isRework) {
-            commitMessage = `${process} - ${typeValue} - ${testerValue} - ${changeMessage} - ${title}`;
+            commitMessage = `${process} - ${testerValue} - ${changeMessage} - ${typeValue} - ${title}`;
         } else {
             commitMessage = "Não há nada para comitar"
         }
